@@ -1,6 +1,6 @@
 <?php
-session_start(); 
-    require 'back/connexion/host.php';
+    session_start(); 
+    require './back/connexion/host.php';
     ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -12,21 +12,31 @@ session_start();
     <title>Document</title>
 </head>
  
+<body>
+    <?php
+    require './back/connexion/host.php';
+    if(isset($_POST["Supprimer"])){
+      $id = intval($_POST["Supprimer"]);
+      $supprimer ="DELETE  FROM product WHERE id = $id";
+      if ($conn->query($supprimer) === TRUE) {
+        header("Location:". $_SERVER["PHP_SELF"]); 
+        
+        exit();
+        
 
-    
+      } else {
+          echo "Error: " . $supprimer . "<br>" . $conn->error;
+      }
+      
+    }
+    ?>
     <!-- component -->
  
     <!-- Create By Joker Banny -->
  
     <body class="bg-white">
-    
         <!-- Header Navbar -->
-        <?php 
-        require 'header.php';
-        
-        ?>
- 
- 
+<?php include('header.php');?> 
         <!-- Title -->
         <div class="pt-32  bg-white">
             <h1 class="text-center text-2xl font-bold text-gray-800">Categories</h1>
@@ -34,46 +44,42 @@ session_start();
  
         <!-- Tab Menu -->
         <form method="post">
-          <div class="flex flex-wrap items-center overflow-x-auto overflow-y-hidden py-10 justify-center bg-white text-gray-800">
-          <button rel="noopener noreferrer" name="category" value="0" class="flex items-center flex-shrink-0 px-5 py-3 space-x-2 text-gray-600">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
-                  <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-              </svg>
-              <span>ALL</span>
-          </button>
-          <?php
-          $gat = "SELECT * FROM category";
-          $sum_cate = $conn->query($gat);
-
-                if ($sum_cate->num_rows > 0) {
-                    while (($cate = $sum_cate->fetch_assoc())) {
-                        echo '
-                        <button rel="noopener noreferrer" name="category" value="' . $cate["id"] . '" class="flex items-center flex-shrink-0 px-5 py-3 space-x-2 rounded-t-lg text-gray-900">
-                            <input type="hidden" name="selected_category" value="' . $cate["id"] . '">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
-                                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-                                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-                            </svg>
-                            <span>' . $cate["name"] . '</span>
-                        </button>
-                        ';
-                    }
+            <div class="flex flex-wrap items-center  overflow-x-auto overflow-y-hidden py-10 justify-center   bg-white text-gray-800">
+                <button rel="noopener noreferrer" name="category" value="0" class="flex items-center flex-shrink-0 px-5 py-3 space-x-2text-gray-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    <span>ALL</span>
+                </button>
+                <?php 
+                $gat = "SELECT * FROM category";
+                $sum_cate = $conn->query($gat);
+                
+                if($sum_cate->num_rows > 0){
+                while(($cate = $sum_cate->fetch_assoc())){
+                  echo '
+                  <button rel="noopener noreferrer" name="category" value="' . $cate["id"] .'" class="flex items-center flex-shrink-0 px-5 py-3 space-x-2 rounded-t-lg text-gray-900">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                    </svg>
+                    <span>' . $cate["name"] .'</span>
+                </button>
+                  ';
                 }
+              }
                 ?>
+                
+                <div>
+                  <input type="text">
+                </div>
             </div>
-            
-              <div class="flex">
-                <div class="mr-5">Trier par prix</div>
-                <input class="border-4" type="number" placeholder="low than" name="Tprice">
-              </div>
-              <button type="submit">Filter</button>
-            
-
+ 
             <!-- Product List -->
             <section class="py-10 bg-gray-100">
                 <div class="mx-auto grid max-w-6xl  grid-cols-1 gap-6 p-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
  
-                    <?php
+                <?php
                     $page = 1;
                     $offset = 0;
                     $pageSize = 4;
@@ -172,13 +178,18 @@ session_start();
                                     <div class="mt-3 flex items-end justify-between">
                                         <p class="text-lg font-bold text-blue-500">$' . $row['new_price'] . '</p>
  
-                                    <div class="flex items-center space-x-1.5 rounded-lg bg-blue-500 px-4 py-1.5 text-white duration-100 hover:bg-blue-600">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
-                                        </svg>
- 
-                                        <button class="text-sm">Add to cart</button>
-                                    </div>
+                                        <div class="flex">
+                                            <div class="flex items-center space-x-1.5 rounded-lg bg-blue-500 px-4 py-1.5 text-white duration-100 hover:bg-blue-600">
+                                            
+    
+                                            <button class="text-sm" name="Supprimer" value= "' . $row['id'] . '">Sup</button>
+                                            </div>
+                                            <div class="flex items-center space-x-1.5 rounded-lg bg-blue-500 px-4 py-1.5 text-white duration-100 hover:bg-blue-600">
+                                            
+    
+                                            <a href="edit_pro.php?edit=' . $row['id'] . '" class="text-sm" name="Modifier" value= "' . $row['id'] . '">Mod</a>
+                                            </div>
+                                        </div>                                  
                                     </div>
                                 </div>
                                 </a>
@@ -193,7 +204,7 @@ session_start();
                     <?php
                     $page = 1;
                     while ($page <= $totalPossiblePages) {
-                        echo '<button class="w-10 bg-white shadow-md space-x-10 m-1 hover:bg-blue-500" name="page" value="' . $page . ' ">' . $page . '</button>';
+                        echo '<button class="w-10 bg-white shadow-md space-x-10 m-1 hover:bg-blue-500" name="page" value="' . $page . '">' . $page . '</button>';
                         $page++;
                     }
                     ?>
@@ -202,7 +213,7 @@ session_start();
         </form>
         <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
  
-   
+    </body>
  
     <footer class="py-6  bg-gray-200 text-gray-900">
       <div class="container px-6 mx-auto space-y-6 divide-y divide-gray-400 md:space-y-12 divide-opacity-50">
@@ -216,6 +227,7 @@ session_start();
                       <span>Terms of service</span>
                   </a>
               </div>
+              
               <div class="flex justify-center pt-4 space-x-4 lg:pt-0 lg:col-end-13">
                   <a rel="noopener noreferrer" href="#" title="Email" class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500 hover:bg-blue-600 duration-150 text-gray-50">
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">

@@ -49,13 +49,7 @@
         <a href="#">
         <form  method="POST" enctype="multipart/form-data">
           <div class="relative flex items-end overflow-hidden rounded-xl">
-          
-    
             <input type="file" name="imageToUpload">
-
-    
-          
-            
           </div>
   
           <div class="mt-10 p-2">

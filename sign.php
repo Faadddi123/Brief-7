@@ -8,7 +8,7 @@
 </head>
 <body>
 <?php 
-  require 'host.php';
+  require './back/connexion/host.php';
 
 
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -31,7 +31,6 @@
     } else if ($checkUserResult->num_rows === 1){
         // Set Verified to FALSE by default
         header("Location: index.php");
-        
           exit();
         
     }
