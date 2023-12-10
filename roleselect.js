@@ -46,3 +46,26 @@ $(document).ready(function() {
       });
     });
   });
+  $(document).ready(function() {
+    $('select[name="role"]').change(function() {
+      var selectedRole = $(this).val();
+      var userId = $(this).find(':selected').attr('id');
+      console.log(selectedRole);
+  
+      $.ajax({
+        type: "POST",
+        url: "pushplus.php",
+        data: {
+          role: selectedRole,
+          userId: userId
+        },
+        cache: false,
+        success: function(data) {
+          console.log(data);
+        },
+        error: function(xhr, status, error) {
+          console.error(xhr);
+        }
+      });
+    });
+  });

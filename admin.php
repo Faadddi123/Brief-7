@@ -1,4 +1,12 @@
+<?php
+session_start(); 
+    require 'back/connexion/host.php';
+    if(!isset($_SESSION['admin'])){
+      header('location:sign.php?error=sdlkfjsldkjf');
+    }
+    else{
 
+    ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -66,7 +74,7 @@ if (isset($_POST["role"])) {
     echo "<p>No user ID provided.</p>";
   }
 } else {
-  echo 'www';
+  echo '';
 }
 include('header.php');
 ?>
@@ -129,23 +137,15 @@ include('header.php');
       </div>
     </div>
   </div>
-  
+  <?php 
+    include('footer.php');
+  ?>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  
   
   <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
   <script src="roleselect.js"></script>
 
-
-
-
-
-
-
-
-
-
-
 </body>
 
 </html>
+<?php }

@@ -1,29 +1,11 @@
-<div class="relative z-10" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
-  <!--
-    Background backdrop, show/hide based on slide-over state.
 
-    Entering: "ease-in-out duration-500"
-      From: "opacity-0"
-      To: "opacity-100"
-    Leaving: "ease-in-out duration-500"
-      From: "opacity-100"
-      To: "opacity-0"
-  -->
+  <!-- panier -->
+<div id="cartContainer" class="hidden relative z-10" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
   <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
 
   <div class="fixed inset-0 overflow-hidden">
     <div class="absolute inset-0 overflow-hidden">
       <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
-        <!--
-          Slide-over panel, show/hide based on slide-over state.
-
-          Entering: "transform transition ease-in-out duration-500 sm:duration-700"
-            From: "translate-x-full"
-            To: "translate-x-0"
-          Leaving: "transform transition ease-in-out duration-500 sm:duration-700"
-            From: "translate-x-0"
-            To: "translate-x-full"
-        -->
         <div class="pointer-events-auto w-screen max-w-md">
           <div class="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
             <div class="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
@@ -43,56 +25,43 @@
               <div class="mt-8">
                 <div class="flow-root">
                   <ul role="list" class="-my-6 divide-y divide-gray-200">
+                    <?php 
+                    $fetch_commande = "SELECT product.*, commande_produit.* FROM product , commande_produit WHERE product.id = commande_produit.idproduit";
+                    $resut = mysqli_query($conn, $fetch_commande);
+                    $total_commande = 0;
+                    while ($row = mysqli_fetch_assoc($resut)) {
+                      $total_commande+=$row['prix_total'];
+                    ?>
+                    <!-- products -->
                     <li class="flex py-6">
-                      <div class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                        <img src="https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-01.jpg" alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt." class="h-full w-full object-cover object-center">
-                      </div>
-
-                      <div class="ml-4 flex flex-1 flex-col">
-                        <div>
-                          <div class="flex justify-between text-base font-medium text-gray-900">
-                            <h3>
-                              <a href="#">Throwback Hip Bag</a>
-                            </h3>
-                            <p class="ml-4">$90.00</p>
-                          </div>
-                          <p class="mt-1 text-sm text-gray-500">Salmon</p>
+                        <div class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                            <img src="assets/image/<?php echo $row['image'];?>" alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt." class="h-full w-full object-cover object-center">
                         </div>
-                        <div class="flex flex-1 items-end justify-between text-sm">
-                          <p class="text-gray-500">Qty 1</p>
 
-                          <div class="flex">
-                            <button type="button" class="font-medium text-indigo-600 hover:text-indigo-500">Remove</button>
-                          </div>
+                        <div class="ml-4 flex flex-1 flex-col">
+                            <div>
+                                <div class="flex justify-between text-base font-medium text-gray-900">
+                                    <h3>
+                                        <a href="#"><?php echo $row['name'];?></a>
+                                    </h3>
+                                    <p class="ml-4"><?php echo $row['new_price'];?> dh</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-1 items-end justify-between text-sm">
+                                <form action="action_cart.php" method="post">
+                                    <input type="hidden" name="product_id" value="<?php echo $row['id']; ?>">
+                                    <label for="quantity">Qty </label>
+                                    <input type="number" name="quantity" value="<?php echo $row['quantite']; ?>" min="1">
+                                    <button type="submit" class="font-medium text-indigo-600 hover:text-indigo-500">Update</button>
+                                </form>
+                                <a href="action_cart.php?delete_id=<?php echo $row['id']; ?>">
+                                    <button type="button" class="font-medium text-indigo-600 hover:text-indigo-500">Remove</button>
+                                </a>
+                            </div>
                         </div>
-                      </div>
                     </li>
-                    <li class="flex py-6">
-                      <div class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                        <img src="https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-02.jpg" alt="Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch." class="h-full w-full object-cover object-center">
-                      </div>
-
-                      <div class="ml-4 flex flex-1 flex-col">
-                        <div>
-                          <div class="flex justify-between text-base font-medium text-gray-900">
-                            <h3>
-                              <a href="#">Medium Stuff Satchel</a>
-                            </h3>
-                            <p class="ml-4">$32.00</p>
-                          </div>
-                          <p class="mt-1 text-sm text-gray-500">Blue</p>
-                        </div>
-                        <div class="flex flex-1 items-end justify-between text-sm">
-                          <p class="text-gray-500">Qty 1</p>
-
-                          <div class="flex">
-                            <button type="button" class="font-medium text-indigo-600 hover:text-indigo-500">Remove</button>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-
-                    <!-- More products... -->
+                    <?php }?>
+                    <!-- products... -->
                   </ul>
                 </div>
               </div>
@@ -100,8 +69,8 @@
 
             <div class="border-t border-gray-200 px-4 py-6 sm:px-6">
               <div class="flex justify-between text-base font-medium text-gray-900">
-                <p>Subtotal</p>
-                <p>$262.00</p>
+                <p>total</p>
+                <p><?php echo $total_commande;?></p>
               </div>
               <p class="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
               <div class="mt-6">
@@ -123,3 +92,26 @@
     </div>
   </div>
 </div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const cartButton = document.querySelector('#cartButton');
+        const cartContainer = document.querySelector('#cartContainer');
+        const closeCartButton = document.querySelector('#closeCart');
+
+        // Écoutez l'événement de clic sur l'icône du panier
+        cartButton.addEventListener('click', function () {
+            // Basculez la classe 'hidden' pour afficher ou masquer le panier
+            cartContainer.classList.toggle('hidden');
+        });
+
+        // Écoutez l'événement de clic sur le bouton de fermeture du panier
+        // closeCartButton.addEventListener('click', function () {
+        //     // Masquer le panier lorsque le bouton de fermeture est cliqué
+        //     cartContainer.classList.add('hidden');
+        // });
+    });
+</script>
+
+

@@ -37,7 +37,7 @@ CREATE TABLE product (
 
 
 CREATE TABLE commande (
-    idcom INT PRIMARY KEY,
+    idcom INT PRIMARY KEY AUTO_INCREMENT,
     date_creation DATE,
     date_envoi DATE,
     date_livraison DATE,
@@ -54,6 +54,7 @@ CREATE TABLE commande_produit (
     quantite INT,
     prix_unitaire FLOAT,
     prix_total FLOAT,
+    PRIMARY KEY(idcom,idproduit),
     CONSTRAINT fk_com FOREIGN KEY (idcom) REFERENCES commande(idcom),
     CONSTRAINT fk_prod FOREIGN KEY (idproduit) REFERENCES product(id)
 );
@@ -96,3 +97,7 @@ WHERE nbachat = (
     FROM product p2
     WHERE p1.category = p2.category
 );
+-- @block
+update users set type = 'admin' where username = "fadi";
+-- @block
+SELECT id , category FROM product where category = 1;

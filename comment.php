@@ -1,3 +1,13 @@
+<?php
+session_start(); 
+    require 'back/connexion/host.php';
+    if(!isset($_SESSION['user'])){
+      header('location:sign.php?error=sdlkfjsldkjf');
+    }
+    else{
+
+    ?>
+ 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -290,4 +300,5 @@
       </section>
     <script src="https://cdn.tailwindcss.com/"></script>
 </body>
-</html>
+</html> 
+  <?php }
